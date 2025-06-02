@@ -12,16 +12,16 @@ namespace Projekt_SBD.Services
             _context = context;
         }
 
-        public async Task WypozyczAsync(long klientId, long przedmiotId)
+        public async Task WypozyczAsync(long klientId, long przedmiotId, DateTime dataWypozyczenia)
         {
             await _context.Database.ExecuteSqlRawAsync(
-                "EXEC WypozyczPrzedmiot @p0, @p1", klientId, przedmiotId);
+                "EXEC DodajWypozyczenie @p0, @p1, @p2", klientId, przedmiotId,dataWypozyczenia);
         }
 
-        public async Task ZwrocAsync(long wypozyczenieId, string stan, string uwagi)
+        public async Task ZwrocAsync(long wypozyczenieId, DateTime Data_zwrotu, string stan, string uwagi)
         {
             await _context.Database.ExecuteSqlRawAsync(
-                "EXEC ZwrocPrzedmiot @p0, @p1, @p2", wypozyczenieId, stan, uwagi);
+                "EXEC ZwrocPrzedmiot @p0, @p1, @p2, @p3", wypozyczenieId,Data_zwrotu, stan, uwagi);
         }
     }
 }

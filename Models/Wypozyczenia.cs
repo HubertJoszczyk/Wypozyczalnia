@@ -10,11 +10,11 @@ namespace Projekt_SBD.Models
         public long Id_Wypozyczenia { get; set; }
 
         [ForeignKey("Klient")]
-        public long Id_Klienta { get; set; }
+        public int Id_Klienta { get; set; }
         public Klienci Klient { get; set; }
 
         [ForeignKey("Przedmiot")]
-        public long Id_Przedmiotu { get; set; }
+        public int Id_Przedmiotu { get; set; }
         public Przedmioty Przedmiot { get; set; }
 
         public DateTime Data_Wypozyczenia { get; set; }
