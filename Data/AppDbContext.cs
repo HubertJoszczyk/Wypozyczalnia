@@ -13,6 +13,7 @@ namespace Projekt_SBD.Data
         public DbSet<Przedmioty> Przedmioty { get; set; }
         public DbSet<Wypozyczenia> Wypozyczenia { get; set; }
         public DbSet<Zwroty> Zwroty { get; set; }
+        public DbSet<PobierzAktywneWypozyczeniaDto> PobierzAktywneWypozyczeniaDto { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Klienci
@@ -55,6 +56,8 @@ namespace Projekt_SBD.Data
                 .WithOne(w => w.Zwrot)
                 .HasForeignKey<Zwroty>(z => z.Id_Wypozyczenia)
                 .OnDelete(DeleteBehavior.Restrict);
+            //
+            modelBuilder.Entity<PobierzAktywneWypozyczeniaDto>().HasNoKey();
         }
     }
 

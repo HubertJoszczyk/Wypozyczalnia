@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Projekt_SBD.Models;
 using Projekt_SBD.Services;
 using System;
 
@@ -27,10 +28,10 @@ namespace Projekt_SBD.Controllers
             await _service.ZwrocAsync(wypozyczenieId,Data_zwrotu, stan, uwagi);
             return Ok("Zwrócono");
         }
-        //[HttpsPost()]
-        //public async Task<IActionResult>  {
-
-          //  return Ok();
-        //}
+        [HttpGet("PobierzAktywneWypozyczenia")]
+        public async Task<ActionResult<List<PobierzAktywneWypozyczeniaDto>>> PobierzAktywneWypozyczenia() {
+            var dane = await _service.PobierzAktywneWypozyczeniaAsync();
+            return Ok(dane);
+        }
     }
 }
