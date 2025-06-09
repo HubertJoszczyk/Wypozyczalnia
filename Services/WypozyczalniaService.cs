@@ -24,12 +24,31 @@ namespace Projekt_SBD.Services
             await _context.Database
                 .ExecuteSqlRawAsync("EXEC ZwrocPrzedmiot @p0, @p1, @p2, @p3", wypozyczenieId, Data_zwrotu, stan, uwagi);
         }
-        public async Task<List<PobierzAktywneWypozyczeniaDto>> PobierzAktywneWypozyczeniaAsync()
+        public async Task<(List<PobierzAktywneWypozyczeniaDto>, int)> PobierzAktywneWypozyczeniaPagedAsync(int pageNumber, int pageSize)
         {
-            return await _context.PobierzAktywneWypozyczeniaDto
-                .FromSqlRaw("EXEC PobierzAktywneWypozyczenia")
+            var baseQuery = _context.Wypozyczenia
+                .Where(w => w.Status == "Aktywne");
+
+            var totalCount = await baseQuery.CountAsync();
+
+            var dane = await baseQuery
+                .Include(w => w.Klient)
+                .Include(w => w.Przedmiot)
+                .OrderBy(w => w.Data_Wypozyczenia)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(w => new PobierzAktywneWypozyczeniaDto
+                {
+                    Id_Wypozyczenia = w.Id_Wypozyczenia,
+                    Imie = w.Klient.Imie,
+                    Nazwisko = w.Klient.Nazwisko,
+                    Nazwa = w.Przedmiot.Nazwa,
+                    Data_Wypozyczenia = w.Data_Wypozyczenia
+                })
                 .ToListAsync();
 
+            return (dane, totalCount);
         }
+
     }
 }

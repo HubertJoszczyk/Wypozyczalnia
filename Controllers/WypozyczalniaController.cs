@@ -29,9 +29,20 @@ namespace Projekt_SBD.Controllers
             return Ok("Zwrócono");
         }
         [HttpGet("PobierzAktywneWypozyczenia")]
-        public async Task<ActionResult<List<PobierzAktywneWypozyczeniaDto>>> PobierzAktywneWypozyczenia() {
-            var dane = await _service.PobierzAktywneWypozyczeniaAsync();
-            return Ok(dane);
+        public async Task<ActionResult> PobierzAktywneWypozyczenia(int pageNumber = 1, int pageSize = 10)
+        {
+            var (dane, totalCount) = await _service.PobierzAktywneWypozyczeniaPagedAsync(pageNumber, pageSize);
+
+            var response = new
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+                Items = dane
+            };
+
+            return Ok(response);
         }
     }
 }
